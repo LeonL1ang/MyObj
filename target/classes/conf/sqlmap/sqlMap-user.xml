@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE sqlMap      
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"      
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="user">
+
+  <typeAlias alias="user" type="org.vista.mall.sys.db.entity.SmpUser" />
+	<resultMap id="userList-result" class="user">
+		<result column="userid" property="userid" jdbcType="DECIMAL" />
+		<result column="loginname" property="loginname" jdbcType="VARCHAR2" />
+		<result column="username" property="username" jdbcType="VARCHAR2" />
+		<result column="password" property="password" jdbcType="VARCHAR2" />
+		<result column="address" property="address" jdbcType="VARCHAR2" />
+		<result column="zip" property="zip" jdbcType="VARCHAR2" />
+		<result column="mobile" property="mobile" jdbcType="VARCHAR2" />
+		<result column="phone" property="phone" jdbcType="VARCHAR2" />
+		<result column="email" property="email" jdbcType="VARCHAR2" />
+		<result column="headimage" property="headimage" jdbcType="VARCHAR2" />
+		<result column="createdate" property="createdate" jdbcType="datetime" />
+		<result column="lastlogindate" property="lastlogindate" jdbcType="datetime" />
+		<result column="createid" property="createid" jdbcType="DECIMAL" />
+		<result column="createcode" property="createcode" jdbcType="VARCHAR2" />
+		<result column="createname" property="createname" jdbcType="VARCHAR2" />
+		<result column="status" property="status" jdbcType="VARCHAR2" />
+		<result column="channelId" property="channelId" jdbcType="VARCHAR2"/>
+<!-- 		<result column="channelName" property="channelName" jdbcType="VARCHAR2"/> -->
+		<result column="catalogcodes" property="catalogCodes" jdbcType="VARCHAR2" />
+	</resultMap>
+
+    <select id="getListByNameAndPwd" parameterClass="java.util.Map" resultMap="userList-result">
+		 select u.userid,
+		        u.loginname,
+		        u.username,
+		        u.password,
+		        u.address,
+		        u.zip,
+		        u.mobile,
+		        u.phone,
+		        u.email,
+		        u.headimage,
+		        u.createdate,
+		        u.lastlogindate,
+		        u.createid,
+		        u.createcode,
+		        u.createname,
+		        u.status,
+		        u.channelId,
+		        u.catalogcodes		 
+		  from pack_USER u
+		 where 1=1
+		<isNotEmpty prepend="AND" property="loginname">
+			u.loginname=#loginname# 
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="password">
+			u.password=#password# 
+		</isNotEmpty>
+	</select>
+
+	<!-- add by wangyg 根据SSOId查询用户信息-->
+	<select id="getListBySSOId" parameterClass="java.util.Map" resultMap="userList-result">
+		select u.userid,
+		        u.loginname,
+		        u.username,
+		        u.password,
+		        u.address,
+		        u.zip,
+		        u.mobile,
+		        u.phone,
+		        u.email,
+		        u.headimage,
+		        u.createdate,
+		        u.lastlogindate,
+		        u.createid,
+		        u.createcode,
+		        u.createname,
+		        u.status,
+		        u.channelId,
+		        u.catalogcodes		 
+		  from pack_USER u
+		 where 1=1
+		<isNotEmpty prepend="AND" property="ssoid">
+			u.ssoid=#ssoid# 
+		</isNotEmpty>
+		
+	</select>
+	
+	<select id="findUserName" resultClass="java.util.HashMap">
+			select s.createid,s.createname from pack_user s
+	</select>
+	
+	<select id="findPassword" parameterClass="java.lang.String" resultClass="java.lang.String">
+		select s.password from pack_user s where loginname = #loginname#
+	</select>
+	
+	<update id="updatePassword" parameterClass="org.vista.mall.sys.db.entity.SmpUser"> 
+		update pack_user s set s.password = #password# where loginname = #loginname#
+	</update>
+	
+	<select id="findMobile" parameterClass="java.lang.String" resultClass="java.lang.String">
+		select s.mobile from pack_user s where loginname = #loginname#
+	</select>
+	
+	<update id="updateMobile" parameterClass="org.vista.mall.sys.db.entity.SmpUser"> 
+		update pack_user s set s.mobile = #mobile# where loginname = #loginname#
+	</update>
+	
+	<!-- 以下为拦截器中查询数据库 -->
+</sqlMap>
+
+
+
+  

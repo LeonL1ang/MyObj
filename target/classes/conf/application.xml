@@ -23,4 +23,58 @@
         <property name="dataSource" ref="dataSource" />
     </bean>
 
+
+	<bean id="dataSource_mysql" class="com.alibaba.druid.pool.DruidDataSource"
+		destroy-method="close" lazy-init="true">
+		<property name="url" value="${mysql_url}" />
+		<property name="username" value="${mysql_username}" />
+		<property name="password" value="${mysql_password}" />
+		<property name="driverClassName" value="${mysql_driverClassName}" />
+		<property name="filters" value="${filters}" />
+		<property name="maxActive" value="${maxActive}" />
+		<property name="initialSize" value="${initialSize}" />
+		<property name="maxWait" value="${maxWait}" />
+		<property name="minIdle" value="${minIdle}" />
+
+		<property name="timeBetweenEvictionRunsMillis" value="${timeBetweenEvictionRunsMillis}" />
+		<property name="minEvictableIdleTimeMillis" value="${minEvictableIdleTimeMillis}" />
+
+		<property name="validationQuery" value="${validationQuery}" />
+		<property name="testWhileIdle" value="${testWhileIdle}" />
+		<property name="testOnBorrow" value="${testOnBorrow}" />
+		<property name="testOnReturn" value="${testOnReturn}" />
+		<property name="removeAbandoned" value="${removeAbandoned}" />
+		<property name="removeAbandonedTimeout" value="${removeAbandonedTimeout}" />
+		<property name="logAbandoned" value="${logAbandoned}" />
+
+		<property name="proxyFilters">
+			<list>
+				<ref bean="logFilter" />
+				<ref bean="statFilter" />
+				<ref bean="wallFilter" />
+			</list>
+		</property>
+
+	</bean>
+	
+		<bean id="logFilter" class="com.alibaba.druid.filter.logging.Slf4jLogFilter">
+		<property name="resultSetLogEnabled" value="true" />
+		<property name="statementExecutableSqlLogEnable" value="true" />
+	</bean>
+
+	<bean id="statFilter" class="com.alibaba.druid.filter.stat.StatFilter">
+		<property name="slowSqlMillis" value="30000" />
+		<property name="logSlowSql" value="true" />
+		<property name="mergeSql" value="true" />
+	</bean>
+
+	<bean id="wallFilter" class="com.alibaba.druid.wall.WallFilter" >
+		<property name="config" ref="wall-config" /> 
+	</bean>
+	
+	<bean id="wall-config" class="com.alibaba.druid.wall.WallConfig">  
+        <property name="multiStatementAllow" value="true" />  
+    </bean>
+
+	
 </beans>
